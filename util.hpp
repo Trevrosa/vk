@@ -7,6 +7,48 @@
 #include <iostream>
 #include <vector>
 
+inline std::vector<const char *> getRequiredExtensions(const bool enableValidationLayers) {
+    uint32_t glfwExtensionCount = 0;
+    const char **glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
+
+    std::vector extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
+
+#if __APPLE__
+    requiredExtensions.push_back(VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME);
+#endif
+
+    if (enableValidationLayers) {
+        extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+    }
+
+    return extensions;
+}
+
+inline bool checkValidationLayerSupport(const std::vector<const char *>& validationLayers) {
+    uint32_t layerCount;
+    vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
+
+    std::vector<VkLayerProperties> availableLayers(layerCount);
+    vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
+
+    for (const char *layerName: validationLayers) {
+        bool layerFound = false;
+
+        for (const auto &layerProperties: availableLayers) {
+            if (std::strcmp(layerName, layerProperties.layerName) == 0) {
+                layerFound = true;
+                break;
+            }
+        }
+
+        if (!layerFound) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 static bool allRequiredExtensionsAvailable() {
     uint32_t extensionCount = 0;
     vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
@@ -17,8 +59,6 @@ static bool allRequiredExtensionsAvailable() {
     uint32_t requiredExtensionCount = 0;
     const char **requiredExtensions = glfwGetRequiredInstanceExtensions(&requiredExtensionCount);
 
-    bool found = false;
-
     for (uint32_t i = 0; i < requiredExtensionCount; i++) {
         if (i > 0)
             std::cout << "\n";
@@ -26,24 +66,22 @@ static bool allRequiredExtensionsAvailable() {
         const char *extension = requiredExtensions[i];
         std::cout << "need " << extension << ".. ";
 
-        bool thisFound = false;
+        bool found = false;
 
         for (const auto &[availableExtensionName, specVersion]: availableExtensions) {
-            if (std::strcmp(extension, availableExtensionName) != 0) {
+            if (std::strcmp(extension, availableExtensionName) == 0) {
                 std::cout << "found with spec version " << specVersion;
-                thisFound = true;
+                found = true;
                 break;
             }
         }
 
-        if (thisFound) {
-            found = true;
-        } else {
-            found = false;
+        if (!found) {
+            return false;
             std::cout << "not found";
         }
     }
 
     std::cout << "\n";
-    return found;
+    return true;
 }
