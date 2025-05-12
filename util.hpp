@@ -14,7 +14,7 @@ inline std::vector<const char *> getRequiredExtensions(const bool enableValidati
     std::vector extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
 
 #if __APPLE__
-    requiredExtensions.push_back(VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME);
+    extensions.push_back(VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME);
 #endif
 
     if (enableValidationLayers) {
