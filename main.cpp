@@ -47,7 +47,9 @@ private:
     void createVkInstance() {
         std::cout << "creating vulkan instance" << std::endl;
 
+        // ReSharper disable once CppRedundantBooleanExpressionArgument
         if (enableValidationLayers && !checkValidationLayerSupport(validationLayers)) {
+            // ReSharper disable once CppRedundantBooleanExpressionArgument
             throw std::runtime_error("validation layers requested, but not available!");
         }
 
@@ -67,6 +69,7 @@ private:
             createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
             createInfo.ppEnabledLayerNames = validationLayers.data();
         } else {
+            // ReSharper disable once CppDFAUnreachableCode
             createInfo.enabledLayerCount = 0;
         }
 
@@ -91,7 +94,8 @@ private:
             throw std::runtime_error("failed to create instance!");
         }
 
-        std::cout << (requiredExtensionsAvailable(extensions) ? "all" : "not all") << " required extensions are available" <<
+        std::cout << (requiredExtensionsAvailable(extensions) ? "all" : "not all") <<
+                " required extensions are available" <<
                 std::endl;
 
         std::cout << "created vulkan instance" << std::endl;
