@@ -13,7 +13,7 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
     )
     set(Vulkan_INCLUDE_DIRS
             "C:\\VulkanSDK\\1.4.313.0\\Include"
-            "C:\\Users\\trevo\\scoop\\apps\\vulkan\\current\\Lib\\Include"
+            "C:\\Users\\trevo\\scoop\\apps\\vulkan\\current\\Include"
     )
     # glfw
     set(GLFW_INCLUDE_DIRS
