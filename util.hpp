@@ -49,17 +49,14 @@ inline bool checkValidationLayerSupport(const std::vector<const char *>& validat
     return true;
 }
 
-static bool allRequiredExtensionsAvailable() {
+static bool requiredExtensionsAvailable(const std::vector<const char *>& requiredExtensions) {
     uint32_t extensionCount = 0;
     vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
 
     std::vector<VkExtensionProperties> availableExtensions(extensionCount);
     vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, availableExtensions.data());
 
-    uint32_t requiredExtensionCount = 0;
-    const char **requiredExtensions = glfwGetRequiredInstanceExtensions(&requiredExtensionCount);
-
-    for (uint32_t i = 0; i < requiredExtensionCount; i++) {
+    for (uint32_t i = 0; i < requiredExtensions.size(); i++) {
         if (i > 0)
             std::cout << "\n";
 

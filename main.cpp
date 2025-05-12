@@ -14,7 +14,7 @@ const std::vector validationLayers = {
     "VK_LAYER_KHRONOS_validation"
 };
 
-#ifndef NDEBUG
+#ifndef _DEBUG
 constexpr bool enableValidationLayers = false;
 #else
 constexpr bool enableValidationLayers = true;
@@ -66,9 +66,9 @@ private:
         if (enableValidationLayers) {
             createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
             createInfo.ppEnabledLayerNames = validationLayers.data();
+        } else {
+            createInfo.enabledLayerCount = 0;
         }
-
-        createInfo.enabledLayerCount = 0;
 
         auto extensions = getRequiredExtensions(enableValidationLayers);
         createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
@@ -91,7 +91,7 @@ private:
             throw std::runtime_error("failed to create instance!");
         }
 
-        std::cout << (allRequiredExtensionsAvailable() ? "all" : "not all") << " required extensions are available" <<
+        std::cout << (requiredExtensionsAvailable(extensions) ? "all" : "not all") << " required extensions are available" <<
                 std::endl;
 
         std::cout << "created vulkan instance" << std::endl;
